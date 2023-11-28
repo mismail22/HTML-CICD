@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-   
-      - name: Install Dependencies
-        run: npm install
 
       - name: Build HTML
         run: echo "Build step (if applicable)"
