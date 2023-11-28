@@ -1,4 +1,4 @@
-name: CI/CD for Simple HTML
+name: CI/CD for Simple HTML with Docker
 
 on:
   push:
@@ -12,24 +12,40 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-
+   
       - name: Install Dependencies
         run: npm install
 
       - name: Build HTML
         run: echo "Build step (if applicable)"
 
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     needs: build
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: miegy7
+          password: Mistral2012
+      
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            mismail-name/your-docker-repo:latest
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
